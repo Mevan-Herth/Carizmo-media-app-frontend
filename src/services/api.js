@@ -1,12 +1,25 @@
-import axios from "axios";
+import axios from 'axios';
 
-const API = axios.create({
-    baseURL: "http://localhost:3000/api",
-    withCredentials: true, // Ensures cookies (JWT) are included
+const api = axios.create({
+  baseURL: 'http://localhost:3000/api',
+  withCredentials: true,
 });
 
-export const register = (userData) => API.post("/users/register", userData);
-export const login = (userData) => API.post("/users/login", userData);
-export const getPublicPosts = () => API.get("/posts");
+// Add token to requests
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
-export default API;
+export const login = (data) => api.post('/users/login', data);
+export const register = (data) => api.post('/users/register', data);
+export const logout = () => api.post('/users/logout');
+export const getPosts = () => api.get('/posts');
+export const createPost = (data) => api.post('/user-posts/add-post', data);
+export const getPost = (id) => api.get(`/posts/post-detail/${id}`);
+export const createComment = (data) => api.post('/comments', data);
+export const getComments = (postId) => api.get(`/comments?postId=${postId}`);
+export default api;

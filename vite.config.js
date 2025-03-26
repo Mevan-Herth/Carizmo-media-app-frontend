@@ -5,15 +5,6 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 3001,
-    proxy: {
-      '/api': {
-        target: 'http://localhost:3000', // backend URL
-        changeOrigin: true,
-        secure: false,
-      }
-    }
+    open: true, // Automatically opens the browser
   },
-  resolve: {
-    extensions: ['.js', '.jsx', '.json'] 
-  }
 });
