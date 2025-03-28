@@ -8,8 +8,8 @@ const Navbar = () => {
 
     const handleLogout = async () => {
         try {
-            // Call the logout API to clear the session
-            await axios.post("http://localhost:3000/api/users/logout", {}, { withCredentials: true });
+
+          await axios.post("http://localhost:3000/api/users/logout", {}, { withCredentials: true });
             setUser(null); // Clear user data in context
         } catch (error) {
             console.error("Error logging out:", error);
@@ -28,7 +28,7 @@ const Navbar = () => {
                             <button onClick={handleLogout}>Logout</button>
                         </li>
                         <li>
-                            <span>Welcome, {user.name}</span> {/* Assuming 'name' is part of the user object */}
+                            <span>Welcome, {user.name}</span> 
                         </li>
                     </>
                 ) : (
