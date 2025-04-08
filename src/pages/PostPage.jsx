@@ -14,7 +14,7 @@ function PostPage() {
 
   useEffect(() => {
     let isMounted = true;
-    
+
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -22,9 +22,9 @@ function PostPage() {
           getPost(id),
           getComments(id)
         ]);
-        
+
         if (!isMounted) return;
-        
+
         setPost(postResponse.data?.post || null);
         setComments(Array.isArray(commentsResponse.data) ? commentsResponse.data : []);
       } catch (err) {
@@ -52,24 +52,42 @@ function PostPage() {
     }
   };
 
-  if (loading) return <div className="loading">Loading post...</div>;
-  if (error) return <div className="error">Error: {error}</div>;
-  if (!post) return <div className="not-found">Post not found</div>;
+  if (loading) return (
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 text-xl text-gray-600">
+      Loading post...
+    </div>
+  );
+
+  if (error) return (
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 text-xl text-red-600">
+      Error: {error}
+    </div>
+  );
+
+  if (!post) return (
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 text-xl text-gray-600">
+      Post not found
+    </div>
+  );
 
   return (
-    <div className="post-page">
-      <article className="post-content">
-        <h1>{post.title}</h1>
-        <p className="post-text">{post.mainText || post.content || 'No content available'}</p>
+    <div className="container mx-auto p-6 max-w-4xl">
+      <article className="bg-white shadow-lg rounded-lg p-6 mb-8">
+        <h1 className="text-3xl font-bold text-gray-800 mb-4">{post.title}</h1>
+        <p className="text-gray-700 leading-relaxed mb-4">
+          {post.mainText || post.content || 'No content available'}
+        </p>
         {post.createdAt && (
-          <small className="post-date">
+          <small className="text-gray-500">
             Posted on: {new Date(post.createdAt).toLocaleString()}
           </small>
         )}
       </article>
 
-      <section className="comments-section">
-        <h2>Comments ({comments.length})</h2>
+      <section className="bg-white shadow-lg rounded-lg p-6">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">
+          Comments ({comments.length})
+        </h2>
         <CommentForm onSubmit={handleCommentSubmit} loading={commentLoading} />
         <CommentList comments={comments} />
       </section>
