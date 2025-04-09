@@ -71,28 +71,28 @@ function PostList() {
   };
 
   // Handle New Comment Submission
-  const handleCommentSubmit = async (postId, content) => {
-    try {
-      const newCommentData = {
-        content,
-        postId,
-      };
+  // const handleCommentSubmit = async (postId, content) => {
+  //   try {
+  //     const newCommentData = {
+  //       content,
+  //       postId,
+  //     };
 
-      const response = await createComment(newCommentData);
-      const newComment = response.data;
+  //     const response = await createComment(newCommentData);
+  //     const newComment = response.data;
 
-      // Update the post with the new comment
-      setPosts((prevPosts) =>
-        prevPosts.map((post) =>
-          post._id === postId
-            ? { ...post, comments: [...(post.comments || []), newComment] }
-            : post
-        )
-      );
-    } catch (err) {
-      setError('Failed to post comment');
-    }
-  };
+  //     // Update the post with the new comment
+  //     setPosts((prevPosts) =>
+  //       prevPosts.map((post) =>
+  //         post._id === postId
+  //           ? { ...post, comments: [...(post.comments || []), newComment] }
+  //           : post
+  //       )
+  //     );
+  //   } catch (err) {
+  //     setError('Failed to post comment');
+  //   }
+  // };
 
   if (loading && page === 1) return <div className="text-center text-gray-500 text-lg">Loading posts...</div>;
 
@@ -170,18 +170,18 @@ function PostList() {
                       key={index}
                       src={image}
                       alt={`Post image ${index + 1}`}
-                      className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-lg"
+                      className="w-24 h-24 sm:w-100 sm:h-100 object-cover rounded-lg"
                     />
                   ))}
                 </div>
               </div>
             )}
 
-            {/* Comment Section */}
+            {/* Comment Section
             <div className="mt-4">
               <CommentList comments={post.comments || []} />
               <CommentForm onSubmit={(content) => handleCommentSubmit(post._id, content)} />
-            </div>
+            </div> */}
           </div>
         </article>
       ))}

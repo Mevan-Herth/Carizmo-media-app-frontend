@@ -4,7 +4,21 @@ import PropTypes from 'prop-types';
 function PostForm({ onSubmit, loading }) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [image, setImage] = useState(null);  // For storing the selected image file
+  const [image, setImage] = useState([null]);  // For storing the selected image file
+  const [previews, setPreviews] = useState([]);
+  
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    setImage(files);
+
+
+    // Generate previews
+    const previewUrls = files.map(file => URL.createObjectURL(file));
+    setPreviews(previewUrls);
+  };
+
+
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -14,9 +28,9 @@ function PostForm({ onSubmit, loading }) {
     const formData = new FormData();
     formData.append('title', title);
     formData.append('content', content);
-    if (image) {
-      formData.append('postImages', image); // Append image if it is selected
-    }
+    image.forEach((image) => {
+      formData.append('postImages', image);
+    });
 
     onSubmit(formData);
     setTitle('');
@@ -68,24 +82,33 @@ function PostForm({ onSubmit, loading }) {
         />
       </div>
 
-      {/* Image Upload Section */}
-      <div>
-        <label
-          htmlFor="image"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Upload Image (optional)
+     {/* Image Upload (Multiple) */}
+     <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Upload Images (Max 5)
         </label>
         <input
-          id="image"
           type="file"
-          onChange={(e) => setImage(e.target.files[0])}
-          accept="image/*" // Restrict file types to images only
-          disabled={loading}
-          className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+          accept="image/*"
+          multiple
+          onChange={handleImageChange}
+          className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
         />
       </div>
 
+      {/* Image Previews */}
+      {previews.length > 0 && (
+        <div className="flex flex-wrap gap-2 mt-2">
+          {previews.map((preview, index) => (
+            <img
+              key={index}
+              src={preview}
+              alt={`Preview ${index}`}
+              className="w-20 h-20 object-cover rounded-lg border"
+            />
+          ))}
+        </div>
+      )}
       <button
         type="submit"
         disabled={loading}

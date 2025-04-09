@@ -37,7 +37,9 @@ function Home() {
     try {
       setSubmitting(true);
       const response = await createPost(data);
-      // setPosts(prev => [response.data, ...prev]);
+      setPosts(prev => [response.data, ...prev]);
+      window.location.href = '/';
+      
     } catch (err) {
       setError(err.response?.data?.message || err.message || 'Failed to create post');
     } finally {
