@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 function PostForm({ onSubmit, loading }) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [image, setImage] = useState([null]);  // For storing the selected image file
+  const [image, setImage] = useState([]); 
   const [previews, setPreviews] = useState([]);
   
   const handleImageChange = (e) => {
@@ -16,8 +16,6 @@ function PostForm({ onSubmit, loading }) {
     const previewUrls = files.map(file => URL.createObjectURL(file));
     setPreviews(previewUrls);
   };
-
-
 
 
   const handleSubmit = (e) => {
@@ -82,8 +80,8 @@ function PostForm({ onSubmit, loading }) {
         />
       </div>
 
-     {/* Image Upload (Multiple) */}
-     <div>
+         {/* Image Upload (Multiple) */}
+         <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Upload Images (Max 5)
         </label>
@@ -109,6 +107,7 @@ function PostForm({ onSubmit, loading }) {
           ))}
         </div>
       )}
+
       <button
         type="submit"
         disabled={loading}

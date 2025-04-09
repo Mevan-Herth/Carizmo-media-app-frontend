@@ -1,1 +1,9 @@
 @import "tailwindcss";
+@layer utilities {
+    .snap-x {
+      scroll-snap-type: x mandatory;
+    }
+    .snap-start {
+      scroll-snap-align: start;
+    }
+  }

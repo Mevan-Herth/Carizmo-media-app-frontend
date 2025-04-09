@@ -9,8 +9,9 @@ function PostList() {
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [currentIndices, setCurrentIndices] = useState({});
 
-  
+
   const fetchPosts = async (isMounted) => {
     try {
       setLoading(true);
@@ -56,7 +57,7 @@ function PostList() {
   useEffect(() => {
     let isMounted = true;
 
-    sessionStorage.setItem('page',page)
+    sessionStorage.setItem('page', page)
     fetchPosts(isMounted);
 
     isMounted = false;
@@ -70,7 +71,7 @@ function PostList() {
     }
   };
 
-  // Handle New Comment Submission
+  // // Handle New Comment Submission
   // const handleCommentSubmit = async (postId, content) => {
   //   try {
   //     const newCommentData = {
@@ -163,17 +164,72 @@ function PostList() {
 
             {/* Post Images */}
             {post.images?.length > 0 && (
-              <div className="mb-4">
-                <div className="flex flex-wrap gap-2">
-                  {post.images.map((image, index) => (
-                    <img
-                      key={index}
-                      src={image}
-                      alt={`Post image ${index + 1}`}
-                      className="w-24 h-24 sm:w-100 sm:h-100 object-cover rounded-lg"
-                    />
-                  ))}
+              <div className="mb-4 relative">
+                {/* Slider container */}
+                <div className="relative overflow-hidden rounded-lg">
+                  {/* Images */}
+                  <div
+                    className="flex transition-transform duration-300 ease-in-out"
+                    style={{ transform: `translateX(-${(currentIndices[post._id] || 0) * 100}%)` }}
+                  >
+                    {post.images.map((image, index) => (
+                      <div key={index} className="w-full flex-shrink-0">
+                        <img
+                          src={image}
+                          alt={`Post image ${index + 1}`}
+                          className="w-full h-64 sm:h-96 object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Navigation arrows */}
+                  {post.images.length > 1 && (
+                    <>
+                      <button
+                        onClick={() => setCurrentIndices(prev => ({
+                          ...prev,
+                          [post._id]: Math.max((prev[post._id] || 0) - 1, 0)
+                        }))}
+                        className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/30 text-white p-2 rounded-full hover:bg-black/50"
+                        disabled={(currentIndices[post._id] || 0) === 0}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                        </svg>
+                      </button>
+                      <button
+                        onClick={() => setCurrentIndices(prev => ({
+                          ...prev,
+                          [post._id]: Math.min((prev[post._id] || 0) + 1, post.images.length - 1)
+                        }))}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/30 text-white p-2 rounded-full hover:bg-black/50"
+                        disabled={(currentIndices[post._id] || 0) === post.images.length - 1}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
+                    </>
+                  )}
                 </div>
+
+                {/* Dot indicators */}
+                {post.images.length > 1 && (
+                  <div className="flex justify-center mt-2 space-x-2">
+                    {post.images.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentIndices(prev => ({
+                          ...prev,
+                          [post._id]: index
+                        }))}
+                        className={`w-2 h-2 rounded-full ${index === (currentIndices[post._id] || 0) ? 'bg-blue-500' : 'bg-gray-300'}`}
+                        aria-label={`Go to slide ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
             )}
 
