@@ -37,7 +37,7 @@ function Home() {
     try {
       setSubmitting(true);
       const response = await createPost(data);
-      setPosts(prev => [response.data, ...prev]);
+      // setPosts(prev => [response.data, ...prev]);
       window.location.href = '/';
       
     } catch (err) {
