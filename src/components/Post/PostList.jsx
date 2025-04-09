@@ -11,51 +11,52 @@ function PostList() {
   const [hasMore, setHasMore] = useState(true);
 
   
+  const fetchPosts = async (isMounted) => {
+    try {
+      setLoading(true);
+
+      const response = await getPosts(page);
+      if (!isMounted) return;
+
+      const fetchedPosts = response.data;
+
+      // Deduplicate posts by _id
+      const newPosts = fetchedPosts.filter(
+        (post) => !posts.some((existingPost) => existingPost._id === post._id)
+      );
+
+      // Fetch comments for each new post
+      const postsWithComments = await Promise.all(
+        newPosts.map(async (post) => {
+          try {
+            const commentsResponse = await getComments(post._id);
+            return { ...post, comments: commentsResponse.data || [] };
+          } catch (err) {
+            console.error(`Failed to fetch comments for post ${post._id}:`, err);
+            return { ...post, comments: [] };
+          }
+        })
+      );
+
+      setPosts((prevPosts) => [...prevPosts, ...postsWithComments]);
+
+      if (fetchedPosts.length === 0) {
+        setHasMore(false);
+      }
+    } catch (err) {
+      if (isMounted) {
+        setError(err.response?.data?.message || err.message || 'Failed to fetch posts');
+      }
+    } finally {
+      if (isMounted) setLoading(false);
+    }
+  };
   // Fetch posts and their comments on mount and page change
   useEffect(() => {
     let isMounted = true;
 
-    const fetchPosts = async () => {
-      try {
-        setLoading(true);
-        const response = await getPosts(page);
-        if (!isMounted) return;
-
-        const fetchedPosts = response.data;
-
-        // Deduplicate posts by _id
-        const newPosts = fetchedPosts.filter(
-          (post) => !posts.some((existingPost) => existingPost._id === post._id)
-        );
-
-        // Fetch comments for each new post
-        const postsWithComments = await Promise.all(
-          newPosts.map(async (post) => {
-            try {
-              const commentsResponse = await getComments(post._id);
-              return { ...post, comments: commentsResponse.data || [] };
-            } catch (err) {
-              console.error(`Failed to fetch comments for post ${post._id}:`, err);
-              return { ...post, comments: [] };
-            }
-          })
-        );
-
-        setPosts((prevPosts) => [...prevPosts, ...postsWithComments]);
-
-        if (fetchedPosts.length === 0) {
-          setHasMore(false);
-        }
-      } catch (err) {
-        if (isMounted) {
-          setError(err.response?.data?.message || err.message || 'Failed to fetch posts');
-        }
-      } finally {
-        if (isMounted) setLoading(false);
-      }
-    };
-
-    fetchPosts();
+    sessionStorage.setItem('page',page)
+    fetchPosts(isMounted);
 
     return () => {
       isMounted = false;
@@ -65,7 +66,11 @@ function PostList() {
   // Handle Load More Posts
   const loadMorePosts = () => {
     if (hasMore) {
+      let isMounted = true;
       setPage((prevPage) => prevPage + 1);
+      
+      fetchPosts(isMounted)
+      
     }
   };
 
