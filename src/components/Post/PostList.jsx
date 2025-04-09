@@ -42,6 +42,7 @@ function PostList() {
 
       if (fetchedPosts.length === 0) {
         setHasMore(false);
+        setPage((prevPage) => prevPage - 1);
       }
     } catch (err) {
       if (isMounted) {
@@ -58,19 +59,14 @@ function PostList() {
     sessionStorage.setItem('page',page)
     fetchPosts(isMounted);
 
-    return () => {
-      isMounted = false;
-    };
+    isMounted = false;
+
   }, [page]);
 
   // Handle Load More Posts
   const loadMorePosts = () => {
     if (hasMore) {
-      let isMounted = true;
       setPage((prevPage) => prevPage + 1);
-      
-      fetchPosts(isMounted)
-      
     }
   };
 
