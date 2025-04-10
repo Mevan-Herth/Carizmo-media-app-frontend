@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import PostList from '../components/Post/PostList';
 import PostForm from '../components/Post/PostForm';
 import { getPosts, createPost } from '../services/api.js';
+import UserSearch from '../components/UserSearch.jsx';
+
 
 function Home() {
   const [posts, setPosts] = useState([]);
@@ -55,6 +57,11 @@ function Home() {
       <p className="mt-3 max-w-2xl mx-auto text-xl text-gray-500 sm:mt-4">
         Share your thoughts with the community
       </p>
+
+      <div className="mt-8">
+        <UserSearch />
+      </div>
+      
     </div>
   
     {/* Error Message */}
