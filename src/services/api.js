@@ -24,5 +24,6 @@ export const getPost = (id) => api.get(`/posts/post-detail/${id}`);
 export const createComment = (data) => api.post('/comments', data);
 export const getComments = (postId) => api.get(`/comments/post-comments/${postId}`);
 export const updateProfile = (id, formData) => api.put(`/users/${id}`, formData, {headers: {'Content-Type': 'multipart/form-data',},});
+export const getUserPosts = (page) => api.get(`/user-posts/all?page=${page}`)
 
 export default api;

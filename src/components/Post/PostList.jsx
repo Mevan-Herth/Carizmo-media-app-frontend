@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { getPosts, createComment, getComments } from '../../services/api'; // Add getComments import
+import { getPosts, createComment, getComments, getUserPosts } from '../../services/api'; // Add getComments import
 import CommentList from '../Comment/CommentList.jsx';
 import CommentForm from '../Comment/CommentForm.jsx';
 
-function PostList() {
+function PostList({userId}) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -15,8 +15,11 @@ function PostList() {
   const fetchPosts = async (isMounted) => {
     try {
       setLoading(true);
-
-      const response = await getPosts(page);
+      
+      let response;
+      if(userId) response = await getUserPosts(page)
+      else response = await getPosts(page)
+      
       if (!isMounted) return;
 
       const fetchedPosts = response.data;

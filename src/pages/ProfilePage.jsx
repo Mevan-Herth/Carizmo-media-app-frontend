@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import api from '../services/api.js';
 import UpdateProfileForm from '../components/UpdateProfileForm';
+import PostList from '../components/Post/PostList.jsx';
 
 function ProfilePage() {
   const [user, setUser] = useState(null);
   const [showModal, setShowModal] = useState(false);
-
+  
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -84,6 +85,10 @@ function ProfilePage() {
           </div>
         </div>
       )}
+
+      <div>
+        <PostList userId={user._id}/>
+      </div>
     </div>
   );
 }
