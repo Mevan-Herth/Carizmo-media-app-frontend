@@ -11,35 +11,37 @@ function Home() {
   const [error, setError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
-  useEffect(() => {
-    let isMounted = true;
+  // useEffect(() => {
+  //   let isMounted = true;
     
-    const fetchPosts = async () => {
-      try {
-        setLoading(true);
-        const response = await getPosts();
-        if (!isMounted) return;
+  //   const fetchPosts = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const response = await getPosts();
+  //       if (!isMounted) return;
         
-        const receivedPosts = response?.data?.posts || response?.data || [];
-        setPosts(Array.isArray(receivedPosts) ? receivedPosts : []);
-      } catch (err) {
-        if (isMounted) {
-          setError(err.response?.data?.message || err.message || 'Failed to fetch posts');
-        }
-      } finally {
-        if (isMounted) setLoading(false);
-      }
-    };
+  //       const receivedPosts = response?.data?.posts || response?.data || [];
+  //       setPosts(Array.isArray(receivedPosts) ? receivedPosts : []);
+  //     } catch (err) {
+  //       if (isMounted) {
+  //         setError(err.response?.data?.message || err.message || 'Failed to fetch posts');
+  //       }
+  //     } finally {
+  //       if (isMounted) setLoading(false);
+  //     }
+  //   };
 
-    fetchPosts();
-    return () => { isMounted = false };
-  }, []);
+  //   fetchPosts();
+  //   return () => { isMounted = false };
+  // }, []);
 
   const handlePostSubmit = async (data) => {
     try {
       setSubmitting(true);
       const response = await createPost(data);
-      setPosts(prev => [response.data, ...prev]);
+      // setPosts(prev => [response.data, ...prev]);
+      window.location.href = '/';
+      
     } catch (err) {
       setError(err.response?.data?.message || err.message || 'Failed to create post');
     } finally {
@@ -95,7 +97,7 @@ function Home() {
           </svg>
           Recent Posts
         </h2>
-        <PostList posts={posts} />
+        <PostList />
       </div>
     )}
   </div>
