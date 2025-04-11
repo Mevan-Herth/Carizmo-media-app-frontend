@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { getSearchResults } from '../services/api'
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 
 const UserSearch = () => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -42,11 +46,11 @@ const UserSearch = () => {
     return () => clearTimeout(delayDebounceFn);
   }, [query]);
 
-  // const handleResultClick = (username) => {
-  //   window.location.href = `/profile/${username}`;
-  //   setIsDropdownOpen(false);
-  //   setQuery('');
-  // };
+  const handleResultClick = (username) => {
+    navigate(`/profile/${username}`);
+    setIsDropdownOpen(false);
+    setQuery('');
+  };
 
   return (
     <div className="relative w-400 max-w-xs md:max-w-sm">

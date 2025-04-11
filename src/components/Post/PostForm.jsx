@@ -39,7 +39,7 @@ function PostForm({ onSubmit, loading }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md space-y-6"
+      className="max-w-md mx-auto  bg-white p-6 rounded-lg shadow-md space-y-6 "
     >
       <h2 className="text-2xl font-bold text-gray-800 text-center mb-4">Create a Post</h2>
       

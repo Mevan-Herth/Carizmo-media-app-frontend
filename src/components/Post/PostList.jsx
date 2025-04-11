@@ -10,8 +10,6 @@ function PostList({userId}) {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [currentIndices, setCurrentIndices] = useState({});
-
-
   const fetchPosts = async (isMounted) => {
     try {
       setLoading(true);
@@ -103,13 +101,13 @@ function PostList({userId}) {
   if (error) return <div className="text-center text-red-500 text-lg">Error: {error}</div>;
 
   return (
-    <div className="container mx-auto p-4 sm:p-6 max-w-3xl">
+    <div className="max-w-4xl w-full container mx-auto p-4 sm:p-6 max-w-3xl">
       {posts.length === 0 && <div className="text-center text-gray-500 text-lg">No posts found</div>}
 
       {posts.map((post, index) => (
         <article
           key={`${post._id}-${index}`}
-          className="flex bg-white border border-gray-200 rounded-lg mb-4 hover:bg-gray-50 transition-colors duration-200"
+          className="flex border border-red-800 bg-indigo-00 rounded-lg mb-4 hover:bg-indigo-200 transition-colors duration-200 shadow-lg"
         >
           {/* Voting Section (Likes) */}
           <div className="flex flex-col items-center bg-gray-100 p-2 sm:p-3 rounded-l-lg">
