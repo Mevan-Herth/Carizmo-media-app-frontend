@@ -1,80 +1,82 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import CommentList from '../components/Comment/CommentList';
-import CommentForm from '../components/Comment/CommentForm';
-import { getPost, getComments, createComment } from '../services/api.js';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getComments, createComment } from '../services/api.js'; 
 
-function PostPage() {
-  const { id } = useParams();
-  const [post, setPost] = useState(null);
+function Post({ post }) {
   const [comments, setComments] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [commentLoading, setCommentLoading] = useState(false);
+  const [newComment, setNewComment] = useState('');
+  const navigate = useNavigate();
 
+  // Fetch comments when the component mounts
   useEffect(() => {
-    let isMounted = true;
-    
-    const fetchData = async () => {
+    const fetchComments = async () => {
       try {
-        setLoading(true);
-        const [postResponse, commentsResponse] = await Promise.all([
-          getPost(id),
-          getComments(id)
-        ]);
-        
-        if (!isMounted) return;
-        
-        setPost(postResponse.data?.post || null);
-        setComments(Array.isArray(commentsResponse.data) ? commentsResponse.data : []);
-      } catch (err) {
-        if (isMounted) {
-          setError(err.response?.data?.message || err.message || 'Failed to fetch post');
-        }
-      } finally {
-        if (isMounted) setLoading(false);
+        const response = await getComments(post._id);
+        setComments(response.data.comments);
+      } catch (error) {
+        console.error('Failed to fetch comments:', error.response?.data);
       }
     };
+    fetchComments();
+  }, [post._id]);
 
-    fetchData();
-    return () => { isMounted = false };
-  }, [id]);
-
-  const handleCommentSubmit = async (content) => {
+  // Handle comment submission
+  const handleCommentSubmit = async (e) => {
+    e.preventDefault();
     try {
-      setCommentLoading(true);
-      const response = await createComment({ postId: id, content });
-      setComments(prevComments => [response.data, ...prevComments]);
-    } catch (err) {
-      setError(err.response?.data?.message || 'Failed to add comment');
-    } finally {
-      setCommentLoading(false);
+      const response = await createComment({
+        postId: post._id,
+        content: newComment,
+      });
+      setComments([...comments, response.data.comment]);
+      setNewComment(''); // Clear the input
+    } catch (error) {
+      console.error('Failed to add comment:', error.response?.data);
     }
   };
 
-  if (loading) return <div className="loading">Loading post...</div>;
-  if (error) return <div className="error">Error: {error}</div>;
-  if (!post) return <div className="not-found">Post not found</div>;
+  // Navigate to the post detail page
+  const handlePostClick = () => {
+    navigate(`/post/${post._id}`);
+  };
 
   return (
-    <div className="post-page">
-      <article className="post-content">
-        <h1>{post.title}</h1>
-        <p className="post-text">{post.mainText || post.content || 'No content available'}</p>
-        {post.createdAt && (
-          <small className="post-date">
-            Posted on: {new Date(post.createdAt).toLocaleString()}
-          </small>
-        )}
-      </article>
+    <div style={{ border: '1px solid #ccc', padding: '10px', margin: '10px 0' }}>
+      {/* Post Content */}
+      <h3 onClick={handlePostClick} style={{ cursor: 'pointer', color: 'blue' }}>
+        {post.title}
+      </h3>
+      <p>{post.content}</p>
+      <p>Posted by: {post.author?.username || 'Unknown'}</p>
+      <p>Created: {new Date(post.createdAt).toLocaleDateString()}</p>
 
-      <section className="comments-section">
-        <h2>Comments ({comments.length})</h2>
-        <CommentForm onSubmit={handleCommentSubmit} loading={commentLoading} />
-        <CommentList comments={comments} />
-      </section>
+      {/* Comments Section */}
+      <div>
+        <h4>Comments</h4>
+        {comments.length > 0 ? (
+          comments.map((comment) => (
+            <div key={comment._id} style={{ marginLeft: '20px' }}>
+              <p>{comment.content}</p>
+              <p>By: {comment.author?.username || 'Unknown'}</p>
+            </div>
+          ))
+        ) : (
+          <p>No comments yet.</p>
+        )}
+      </div>
+
+      <form onSubmit={handleCommentSubmit}>
+        <textarea
+          value={newComment}
+          onChange={(e) => setNewComment(e.target.value)}
+          placeholder="Add a comment..."
+          required
+          style={{ width: '100%', height: '60px', margin: '10px 0' }}
+        />
+        <button type="submit">Post Comment</button>
+      </form>
     </div>
   );
 }
 
-export default PostPage;
+export default Post;
