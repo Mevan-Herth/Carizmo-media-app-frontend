@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import PostList from '../components/Post/PostList';
 import PostForm from '../components/Post/PostForm';
 import { getPosts, createPost } from '../services/api.js';
-import UserSearch from '../components/UserSearch.jsx';
+
 
 
 function Home() {
@@ -60,9 +60,7 @@ function Home() {
         Share your thoughts with the community
       </p>
 
-      <div className="mt-8">
-        <UserSearch />
-      </div>
+   
       
     </div>
   
