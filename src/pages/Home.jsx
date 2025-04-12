@@ -50,13 +50,13 @@ function Home() {
   };
 
   return (
-    <div className="w-screen bg-gradient-to-r from-purple-300  to-indigo-300 mx-auto px-4 py-8 sm:px-6 lg:px-8 flex flex-col items-center">
+    <div className="w-screen bg-zinc-900 mx-auto px-4 py-8 sm:px-6 lg:px-8 flex flex-col items-center">
     {/* Page Header */}
     <div className="text-center mb-10">
-      <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
+      <h1 className="text-4xl font-extrabold text-gray-100 sm:text-5xl sm:tracking-tight lg:text-6xl">
         Welcome to Your Feed
       </h1>
-      <p className="mt-3 max-w-2xl mx-auto text-xl text-gray-800 sm:mt-4">
+      <p className="mt-3 max-w-2xl mx-auto text-xl text-gray-100 sm:mt-4">
         Share your thoughts with the community
       </p>
 
@@ -77,7 +77,7 @@ function Home() {
     )}
   
     {/* Post Form */}
-    <div className="max-w-4xl w-full mb-10 border border-red-800 bg-indigo-200 rounded-xl shadow-md overflow-hidden p-6 transition-all duration-300 hover:shadow-lg ">
+    <div className="max-w-4xl w-full mb-10 border border-red-800 bg-zinc-900 rounded-xl shadow-md overflow-hidden p-6 transition-all duration-300 hover:shadow-lg ">
       <PostForm onSubmit={handlePostSubmit} loading={submitting} />
     </div>
   
@@ -89,7 +89,7 @@ function Home() {
       </div>
     ) : (
       <div className="space-y-6 max-w-4xl">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+        <h2 className="text-2xl font-bold text-gray-100 mb-6 flex items-center">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
           </svg>

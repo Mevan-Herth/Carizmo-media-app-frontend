@@ -27,15 +27,15 @@ function PublicProfilePage() {
     fetchPublicProfile();
   }, [username]);
 
-  if (loading) return <div className="text-center mt-8 text-gray-600">Loading profile...</div>;
+  if (loading) return <div className="text-center mt-8 text-gray-100">Loading profile...</div>;
   if (error || !user) return <div className="text-center mt-8 text-red-500">{error || 'Error loading profile'}</div>;
 
   return (
-    <div className="container mx-auto p-6 max-w-4xl bg-white rounded-xl shadow-xl">
+    <div className="w-screen p-6 bg-zinc-800  shadow-xl">
       {/* Cover Photo */}
       <div className="relative w-full h-48 rounded-t-xl overflow-hidden">
         <img
-          src={user.coverPicture || '/default-cover.jpg'}
+          src={user.coverPicture || '../public/img/default_cover.png'}
           alt="Cover"
           className="w-full h-full object-cover"
         />
@@ -45,7 +45,7 @@ function PublicProfilePage() {
       <div className="flex justify-center -mt-16">
         <div className="relative w-32 h-32">
           <img
-            src={user.profilePicture || '/default-avatar.png'}
+            src={user.profilePicture || '../public/img/DEFProfile.png'}
             alt="Profile"
             className="w-32 h-32 rounded-full border-4 border-white shadow-lg object-cover"
           />
@@ -54,20 +54,20 @@ function PublicProfilePage() {
 
       {/* User Info */}
       <div className="text-center mt-6">
-        <h1 className="text-3xl font-extrabold text-gray-800">{user.username}</h1>
-        <p className="text-xl text-gray-600">{user.bio || 'No bio yet'}</p>
+        <h1 className="text-3xl font-extrabold text-gray-100">{user.username}</h1>
+        <p className="text-xl text-gray-100">{user.bio || 'No bio yet'}</p>
       </div>
 
       {/* Stats */}
       <div className="space-y-2 mt-6 text-center text-gray-700">
-        <p><span className="font-semibold text-indigo-600">Email:</span> {user.email}</p>
-        <p><span className="font-semibold text-indigo-600">Followers:</span> {user.followers?.length || 0}</p>
-        <p><span className="font-semibold text-indigo-600">Following:</span> {user.following?.length || 0}</p>
+        <p className="font-semibold text-indigo-100"><span >Email:</span> {user.email}</p>
+        <p className="font-semibold text-indigo-100"><span >Followers:</span> {user.followers?.length || 0}</p>
+        <p className="font-semibold text-indigo-100"><span>Following:</span> {user.following?.length || 0}</p>
       </div>
 
       {/* User Posts */}
       <div className="mt-10">
-        <h2 className="text-2xl font-bold mb-4 text-gray-800 text-center">Posts by {user.username}</h2>        
+        <h2 className="text-2xl font-bold mb-4 text-gray-100 text-center">Posts by {user.username}</h2>        
         <PostList posts={user._id} />
        
       </div>

@@ -107,11 +107,11 @@ function PostList({userId}) {
       {posts.map((post, index) => (
         <article
           key={`${post._id}-${index}`}
-          className="flex border border-red-800 bg-indigo-00 rounded-lg mb-4 hover:bg-indigo-200 transition-colors duration-200 shadow-lg"
+          className="flex border border-red-800  rounded-lg mb-4 hover:bg-zinc-600 transition-colors duration-200 shadow-lg"
         >
           {/* Voting Section (Likes) */}
-          <div className="flex flex-col items-center bg-gray-100 p-2 sm:p-3 rounded-l-lg">
-            <button className="text-gray-500 hover:text-orange-500 transition-colors">
+          <div className="flex flex-col items-center bg-gray-400 p-2 sm:p-3 rounded-l-lg">
+            <button className="text-zinc-900 hover:text-orange-500 transition-colors">
               <svg
                 className="w-6 h-6"
                 fill="none"
@@ -127,8 +127,8 @@ function PostList({userId}) {
                 />
               </svg>
             </button>
-            <span className="text-gray-700 font-medium my-1">{post.likes || 0}</span>
-            <button className="text-gray-500 hover:text-orange-500 transition-colors">
+            <span className="text-zinc-900 font-medium my-1">{post.likes || 0}</span>
+            <button className="text-zinc-900 hover:text-orange-500 transition-colors">
               <svg
                 className="w-6 h-6"
                 fill="none"
@@ -149,19 +149,19 @@ function PostList({userId}) {
           {/* Post Content */}
           <div className="flex-1 p-3 sm:p-4">
             {/* Post Metadata */}
-            <div className="flex items-center text-sm text-gray-500 mb-2">
+            <div className="flex items-center text-sm text-gray-100 mb-2">
               <span>Posted on: {new Date(post.createdAt).toLocaleString()}</span>
               <span className="mx-2">•</span>
               <span>Updated on: {new Date(post.updatedAt).toLocaleString()}</span>
             </div>
 
             {/* Post Title */}
-            <h1 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-2 hover:text-blue-600 cursor-pointer transition-colors">
+            <h1 className="text-xl sm:text-2xl font-semibold text-gray-100 mb-2 hover:text-blue-600 cursor-pointer transition-colors">
               {post.title}
             </h1>
 
             {/* Post Content */}
-            <p className="text-gray-700 mb-4">{post.mainText || 'No content available'}</p>
+            <p className="text-gray-100 mb-4">{post.mainText || 'No content available'}</p>
 
             {/* Post Images */}
             {post.images?.length > 0 && (

@@ -39,14 +39,14 @@ function PostForm({ onSubmit, loading }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-md mx-auto  bg-white p-6 rounded-lg shadow-md space-y-6 "
+      className="max-w-md mx-auto bg-zinc-700 text-gray-100 p-6 rounded-lg shadow-md space-y-6 "
     >
-      <h2 className="text-2xl font-bold text-gray-800 text-center mb-4">Create a Post</h2>
+      <h2 className="text-2xl font-bold text-gray-100 text-center mb-4">Create a Post</h2>
       
       <div>
         <label
           htmlFor="title"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-medium text-gray-100"
         >
           Post Title
         </label>
@@ -65,7 +65,7 @@ function PostForm({ onSubmit, loading }) {
       <div>
         <label
           htmlFor="content"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-medium text-gray-100"
         >
           Post Content
         </label>
@@ -82,7 +82,7 @@ function PostForm({ onSubmit, loading }) {
 
          {/* Image Upload (Multiple) */}
          <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-gray-100 mb-1">
           Upload Images (Max 5)
         </label>
         <input
@@ -90,7 +90,7 @@ function PostForm({ onSubmit, loading }) {
           accept="image/*"
           multiple
           onChange={handleImageChange}
-          className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+          className="block w-full text-sm text-gray-50 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
         />
       </div>
 
