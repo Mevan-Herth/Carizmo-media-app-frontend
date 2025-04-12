@@ -50,7 +50,7 @@ function Login({ onLogin }) {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
             required
-            className="w-full px-4 py-2 mt-1 border border-gray-100 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none placeholder-gray-300"
+            className="w-full px-4 py-2 mt-1 border border-gray-100 rounded-lg focus:ring-2 focus:ring-red-400 text-gray-100 focus:outline-none placeholder-gray-300"
           />
         </div>
 
@@ -68,7 +68,7 @@ function Login({ onLogin }) {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter your password"
             required
-            className="w-full px-4 py-2 mt-1 border border-gray-100 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none placeholder-gray-300"
+            className="w-full px-4 py-2 mt-1 border border-gray-100 text-gray-100 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none placeholder-gray-300"
           />
         </div>
 
