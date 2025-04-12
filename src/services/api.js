@@ -27,5 +27,7 @@ export const updateProfile = (id, formData) => api.put(`/users/${id}`, formData,
 export const getUserPosts = (page) => api.get(`/user-posts/all?page=${page}`)
 export const getSearchResults = (query) => api.get(`/search-service/search?query=${query}`);
 export const getProfileByUsername = (username) => api.get(`/users/profilebyusername/${username}`);
+export const votePost = (postId, voteType) => {return api.post('/user-posts/vote', {postId,voteType,});};
+
 
 export default api;

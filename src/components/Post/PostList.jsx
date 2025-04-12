@@ -1,23 +1,24 @@
 import { useEffect, useState } from 'react';
-import { getPosts, createComment, getComments, getUserPosts } from '../../services/api'; // Add getComments import
+import { getPosts, createComment, getComments, getUserPosts, votePost } from '../../services/api'; // Add getComments import
 import CommentList from '../Comment/CommentList.jsx';
 import CommentForm from '../Comment/CommentForm.jsx';
 
-function PostList({userId}) {
+function PostList({ userId }) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [currentIndices, setCurrentIndices] = useState({});
+
   const fetchPosts = async (isMounted) => {
     try {
       setLoading(true);
-      
+
       let response;
-      if(userId) response = await getUserPosts(page)
+      if (userId) response = await getUserPosts(page)
       else response = await getPosts(page)
-      
+
       if (!isMounted) return;
 
       const fetchedPosts = response.data;
@@ -96,6 +97,24 @@ function PostList({userId}) {
   //   }
   // };
 
+  const handleVote = async (postId, voteType) => {
+    try {
+      const response = await votePost(postId, voteType);
+      console.log("Vote response:", response.data);
+
+      setPosts(prevPosts =>
+        prevPosts.map(post =>
+          post._id === postId
+            ? { ...post, likes: response.data.updatedLikes ?? post.likes }
+            : post
+
+        )
+      );
+    } catch (error) {
+      console.error("Vote error:", error.response?.data || error.message);
+    }
+  };
+
   if (loading && page === 1) return <div className="text-center text-gray-500 text-lg">Loading posts...</div>;
 
   if (error) return <div className="text-center text-red-500 text-lg">Error: {error}</div>;
@@ -111,37 +130,21 @@ function PostList({userId}) {
         >
           {/* Voting Section (Likes) */}
           <div className="flex flex-col items-center bg-gray-400 p-2 sm:p-3 rounded-l-lg">
-            <button className="text-zinc-900 hover:text-orange-500 transition-colors">
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M5 15l7-7 7 7"
-                />
+            <button
+              className="text-zinc-900 hover:text-orange-500 transition-colors"
+              onClick={() => handleVote(post._id, "up")}
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 15l7-7 7 7" />
               </svg>
             </button>
             <span className="text-zinc-900 font-medium my-1">{post.likes || 0}</span>
-            <button className="text-zinc-900 hover:text-orange-500 transition-colors">
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M19 9l-7 7-7-7"
-                />
+            <button
+              className="text-zinc-900 hover:text-orange-500 transition-colors"
+              onClick={() => handleVote(post._id, "down")}
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
               </svg>
             </button>
           </div>
