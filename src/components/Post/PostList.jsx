@@ -4,6 +4,7 @@ import CommentList from '../Comment/CommentList.jsx';
 import CommentForm from '../Comment/CommentForm.jsx';
 
 function PostList({ userId }) {
+  const [userid,setUserId] = useState(userId)
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -16,7 +17,7 @@ function PostList({ userId }) {
       setLoading(true);
 
       let response;
-      if (userId) response = await getUserPosts(page)
+      if (userid) response = await getUserPosts(userid,page)
       else response = await getPosts(page)
 
       if (!isMounted) return;
@@ -43,7 +44,7 @@ function PostList({ userId }) {
 
       setPosts((prevPosts) => [...prevPosts, ...postsWithComments]);
 
-      if (fetchedPosts.length === 0) {
+      if (fetchedPosts.length === 0 && hasMore) {
         setHasMore(false);
         setPage((prevPage) => prevPage - 1);
       }
@@ -64,7 +65,7 @@ function PostList({ userId }) {
 
     isMounted = false;
 
-  }, [page]);
+  }, [page,userid]);
 
   // Handle Load More Posts
   const loadMorePosts = () => {

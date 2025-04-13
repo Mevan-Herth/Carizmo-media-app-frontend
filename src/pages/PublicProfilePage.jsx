@@ -68,7 +68,7 @@ function PublicProfilePage() {
       {/* User Posts */}
       <div className="mt-10">
         <h2 className="text-2xl font-bold mb-4 text-gray-100 text-center">Posts by {user.username}</h2>        
-        <PostList posts={user._id} />
+        <PostList userId={user._id} />
        
       </div>
     </div>
