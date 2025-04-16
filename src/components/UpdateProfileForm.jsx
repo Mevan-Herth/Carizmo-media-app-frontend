@@ -59,7 +59,7 @@ function UpdateProfileForm({ user, onUpdate }) {
 
             <div className="space-y-4">
                 <div>
-                    <label className="block text-gray-700 font-medium">Username:</label>
+                    <label className=" flexblock text-gray-700 font-medium">Username:</label>
                     <input 
                         type="text" 
                         name="username" 

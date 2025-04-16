@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import api from '../services/api.js';
+import {getProfile} from '../services/api.js';
 import UpdateProfileForm from '../components/UpdateProfileForm';
 import PostList from '../components/Post/PostList.jsx';
 
@@ -10,7 +10,7 @@ function ProfilePage() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await api.get('/users/profile');
+        const response = await getProfile();
         setUser(response.data.user);
       } catch (error) {
         console.error('Failed to fetch profile:', error);
