@@ -54,7 +54,7 @@ function Navigation() {
           </div>
 
 
-          <div className="flex items-center mr-[-19rem] relative" ref={dropdownRef}>
+          <div className="flex items-center relative" ref={dropdownRef}>
             {isLoggedIn ? (
               <>
                 {user ? (
