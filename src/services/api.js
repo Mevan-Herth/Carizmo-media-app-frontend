@@ -28,6 +28,7 @@ export const getUserPosts = (userId,page) => api.get(`/user-posts/all?page=${pag
 export const getSearchResults = (query) => api.get(`/search-service/search?query=${query}`);
 export const getProfileByUsername = (username) => api.get(`/users/profilebyusername/${username}`);
 export const votePost = (postId, voteType) => {return api.post('/user-posts/vote', {postId,voteType,});};
+export const chatBotQuery = (query) => {return api.post('/chatbot',{prompt:query});};
 
 
 export default api;

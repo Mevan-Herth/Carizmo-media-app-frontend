@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import { logout } from '../services/api';
 import UserSearch from '../components/UserSearch.jsx';
 import { useUser } from './useUser.jsx'
+import ChatBubble from './Chatbot.jsx';
 
 function Navigation() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -53,6 +54,9 @@ function Navigation() {
             {isLoggedIn && <UserSearch />}
           </div>
 
+          <div>
+            <ChatBubble/>
+          </div>
 
           <div className="flex items-center relative" ref={dropdownRef}>
             {isLoggedIn ? (
