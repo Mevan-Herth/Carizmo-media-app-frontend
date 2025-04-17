@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { getPosts, createComment, getComments, getUserPosts } from '../../services/api'; // Add getComments import
+import { getPosts, createComment, getComments, getUserPosts, votePost } from '../../services/api'; // Add getComments import
 import CommentList from '../Comment/CommentList.jsx';
 import CommentForm from '../Comment/CommentForm.jsx';
 
-function PostList({userId}) {
+function PostList({ userId }) {
+  const [userid,setUserId] = useState(userId)
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -11,15 +12,14 @@ function PostList({userId}) {
   const [hasMore, setHasMore] = useState(true);
   const [currentIndices, setCurrentIndices] = useState({});
 
-
   const fetchPosts = async (isMounted) => {
     try {
       setLoading(true);
-      
+
       let response;
-      if(userId) response = await getUserPosts(page)
+      if (userid) response = await getUserPosts(userid,page)
       else response = await getPosts(page)
-      
+
       if (!isMounted) return;
 
       const fetchedPosts = response.data;
@@ -44,7 +44,7 @@ function PostList({userId}) {
 
       setPosts((prevPosts) => [...prevPosts, ...postsWithComments]);
 
-      if (fetchedPosts.length === 0) {
+      if (fetchedPosts.length === 0 && hasMore) {
         setHasMore(false);
         setPage((prevPage) => prevPage - 1);
       }
@@ -65,7 +65,7 @@ function PostList({userId}) {
 
     isMounted = false;
 
-  }, [page]);
+  }, [page,userid]);
 
   // Handle Load More Posts
   const loadMorePosts = () => {
@@ -98,52 +98,62 @@ function PostList({userId}) {
   //   }
   // };
 
+  const handleVote = async (postId, voteType) => {
+    try {
+      const response = await votePost(postId, voteType);
+      console.log("Vote response:", response.data);
+
+      setPosts(prevPosts =>
+        prevPosts.map(post =>
+          post._id === postId
+            ? {
+                ...post,
+                likes:
+                  voteType === 'up'
+                    ? (post.likes || 0) + 1
+                    : (post.likes || 0) - 1,
+                    
+              }
+            : post
+        )
+      );
+      await votePost(postId, voteType);
+
+    } catch (error) {
+      console.error("Vote error:", error.response?.data || error.message);
+    }
+  };
+
   if (loading && page === 1) return <div className="text-center text-gray-500 text-lg">Loading posts...</div>;
 
   if (error) return <div className="text-center text-red-500 text-lg">Error: {error}</div>;
 
   return (
-    <div className="container mx-auto p-4 sm:p-6 max-w-3xl">
+    <div className="max-w-4xl w-full container mx-auto p-4 sm:p-6 max-w-3xl">
       {posts.length === 0 && <div className="text-center text-gray-500 text-lg">No posts found</div>}
 
       {posts.map((post, index) => (
         <article
           key={`${post._id}-${index}`}
-          className="flex bg-white border border-gray-200 rounded-lg mb-4 hover:bg-gray-50 transition-colors duration-200"
+          className="flex border border-red-800  rounded-lg mb-4 hover:bg-zinc-600 transition-colors duration-200 shadow-lg"
         >
           {/* Voting Section (Likes) */}
-          <div className="flex flex-col items-center bg-gray-100 p-2 sm:p-3 rounded-l-lg">
-            <button className="text-gray-500 hover:text-orange-500 transition-colors">
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M5 15l7-7 7 7"
-                />
+          <div className="flex flex-col items-center bg-gray-400 p-2 sm:p-3 rounded-l-lg">
+            <button
+              className="text-zinc-900 hover:text-orange-500 transition-colors"
+              onClick={() => handleVote(post._id, "up")}
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 15l7-7 7 7" />
               </svg>
             </button>
-            <span className="text-gray-700 font-medium my-1">{post.likes || 0}</span>
-            <button className="text-gray-500 hover:text-orange-500 transition-colors">
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M19 9l-7 7-7-7"
-                />
+            <span className="text-zinc-900 font-medium my-1">{post.likes || 0}</span>
+            <button
+              className="text-zinc-900 hover:text-orange-500 transition-colors"
+              onClick={() => handleVote(post._id, "down")}
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
               </svg>
             </button>
           </div>
@@ -151,19 +161,19 @@ function PostList({userId}) {
           {/* Post Content */}
           <div className="flex-1 p-3 sm:p-4">
             {/* Post Metadata */}
-            <div className="flex items-center text-sm text-gray-500 mb-2">
+            <div className="flex items-center text-sm text-gray-100 mb-2">
               <span>Posted on: {new Date(post.createdAt).toLocaleString()}</span>
               <span className="mx-2">•</span>
               <span>Updated on: {new Date(post.updatedAt).toLocaleString()}</span>
             </div>
 
             {/* Post Title */}
-            <h1 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-2 hover:text-blue-600 cursor-pointer transition-colors">
+            <h1 className="text-xl sm:text-2xl font-semibold text-gray-100 mb-2 hover:text-blue-600 cursor-pointer transition-colors">
               {post.title}
             </h1>
 
             {/* Post Content */}
-            <p className="text-gray-700 mb-4">{post.mainText || 'No content available'}</p>
+            <p className="text-gray-100 mb-4">{post.mainText || 'No content available'}</p>
 
             {/* Post Images */}
             {post.images?.length > 0 && (

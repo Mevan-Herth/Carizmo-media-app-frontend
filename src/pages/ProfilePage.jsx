@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import api from '../services/api.js';
+import {getProfile} from '../services/api.js';
 import UpdateProfileForm from '../components/UpdateProfileForm';
 import PostList from '../components/Post/PostList.jsx';
 
@@ -10,19 +10,19 @@ function ProfilePage() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await api.get('/users/profile');
+        const response = await getProfile();
         setUser(response.data.user);
       } catch (error) {
         console.error('Failed to fetch profile:', error);
       }
     };
     fetchProfile();
-  }, []);
+  }, [user]);
 
   if (!user) return <div className="text-center mt-8 text-gray-600">Loading...</div>;
 
   return (
-    <div className="container mx-auto p-6 max-w-4xl bg-white rounded-xl shadow-xl">
+    <div className=" w-screen p-6 bg-zinc-800  shadow-xl">
       {/* Cover Photo */}
       <div className="relative w-full h-48 rounded-t-xl overflow-hidden">
         <img
@@ -45,21 +45,21 @@ function ProfilePage() {
 
       {/* Profile Details */}
       <div className="text-center mt-6">
-        <h1 className="text-3xl font-extrabold text-gray-800">{user.username}</h1>
-        <p className="text-xl text-gray-600">{user.bio || 'No bio yet'}</p>
+        <h1 className="text-3xl font-extrabold text-gray-100">{user.username}</h1>
+        <p className="text-xl text-gray-100">{user.bio || 'No bio yet'}</p>
       </div>
 
       <div className="space-y-4 mt-6 text-center text-gray-700">
-        <p><span className="font-semibold text-indigo-600">Email:</span> {user.email}</p>
-        <p><span className="font-semibold text-indigo-600">Followers:</span> {user.followers?.length || 0}</p>
-        <p><span className="font-semibold text-indigo-600">Following:</span> {user.following?.length || 0}</p>
+        <p className="font-semibold text-indigo-100" ><span >Email:</span> {user.email}</p>
+        <p className="font-semibold text-indigo-100"><span>Followers:</span> {user.followers?.length || 0}</p>
+        <p className="font-semibold text-indigo-100"><span>Following:</span> {user.following?.length || 0}</p>
       </div>
 
       {/* Edit Profile Button */}
       <div className="mt-8 text-center">
         <button
           onClick={() => setShowModal(true)}
-          className="w-half bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-lg transition-colors transform hover:scale-105"
+          className="w-half  hover:bg-red-600 text-white font-medium py-2 px-3 rounded-lg transition-colors transform hover:scale-105"
         >
           Edit Profile
         </button>
@@ -87,7 +87,11 @@ function ProfilePage() {
       )}
 
       <div>
-        <PostList userId={user._id}/>
+        {user._id ? (<div >
+            <PostList userId={user._id}/>
+          </div>) :
+        null}
+        
       </div>
     </div>
   );

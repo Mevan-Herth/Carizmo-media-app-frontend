@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { getSearchResults } from '../services/api'
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 
 const UserSearch = () => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -42,17 +46,18 @@ const UserSearch = () => {
     return () => clearTimeout(delayDebounceFn);
   }, [query]);
 
-  // const handleResultClick = (username) => {
-  //   window.location.href = `/profile/${username}`;
-  //   setIsDropdownOpen(false);
-  //   setQuery('');
-  // };
+  const handleResultClick = (username) => {
+    navigate(`/profile/${username}`);
+    setIsDropdownOpen(false);
+    setQuery('');
+  };
 
   return (
-    <div className="relative w-400 max-w-xs md:max-w-sm">
+    <div className="relative w-400 max-w-xs md:max-w-sm border">
     <input
       type="text"
-      className="w-full px-4 py-2 border border-gray-300 bg-white text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
+      className="w-full px-4 py-2 border border-gray-300 bg-gray-600 text-sm 
+      text-white rounded-md focus:outline-none focus:ring-2 focus:ring-red-800 shadow-sm"
       placeholder="Search users..."
       value={query}
       onChange={(e) => setQuery(e.target.value)}
