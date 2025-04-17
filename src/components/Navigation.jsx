@@ -38,19 +38,20 @@ function Navigation() {
   return (
     <nav className="bg-slate-950 shadow-lg w-screen fixed top-0 z-50">
       <div className="max-w-6xl mx-auto px-4">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-center items-center h-16 border relative">
 
           <div className="flex space-x-4">
             <Link
               to="/"
-              className=" text-white hover:bg-red-800 px-3 py-2 rounded-md text-lg font-medium transition duration-300 flex items-center"
+              className=" text-white self-start absolute top-[0.4rem] left-0 hover:bg-red-800 px-3 py-2 rounded-md 
+              text-lg font-medium transition duration-300 flex items-center"
             >
               Home
             </Link>
           </div>
 
 
-          <div className="mr-[15rem] ">
+          <div className="border">
             {isLoggedIn && <UserSearch />}
           </div>
 
@@ -58,7 +59,7 @@ function Navigation() {
             <ChatBubble/>
           </div>
 
-          <div className="flex items-center relative" ref={dropdownRef}>
+          <div className="flex items-center absolute right-0 self-end" ref={dropdownRef}>
             {isLoggedIn ? (
               <>
                 {user ? (
