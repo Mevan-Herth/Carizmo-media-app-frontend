@@ -106,11 +106,19 @@ function PostList({ userId }) {
       setPosts(prevPosts =>
         prevPosts.map(post =>
           post._id === postId
-            ? { ...post, likes: response.data.updatedLikes ?? post.likes }
+            ? {
+                ...post,
+                likes:
+                  voteType === 'up'
+                    ? (post.likes || 0) + 1
+                    : (post.likes || 0) - 1,
+                    
+              }
             : post
-
         )
       );
+      await votePost(postId, voteType);
+
     } catch (error) {
       console.error("Vote error:", error.response?.data || error.message);
     }
