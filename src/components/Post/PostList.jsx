@@ -102,17 +102,13 @@ function PostList({ userId }) {
     try {
       const response = await votePost(postId, voteType);
       console.log("Vote response:", response.data);
-
+      const { voteChange } = response.data;
       setPosts(prevPosts =>
         prevPosts.map(post =>
           post._id === postId
             ? {
                 ...post,
-                likes:
-                  voteType === 'up'
-                    ? (post.likes || 0) + 1
-                    : (post.likes || 0) - 1,
-                    
+                likes: (post.likes || 0) + voteChange,
               }
             : post
         )

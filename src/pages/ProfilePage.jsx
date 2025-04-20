@@ -17,7 +17,7 @@ function ProfilePage() {
       }
     };
     fetchProfile();
-  }, [user]);
+  }, []);
 
   if (!user) return <div className="text-center mt-8 text-gray-600">Loading...</div>;
 
