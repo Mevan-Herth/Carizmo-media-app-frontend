@@ -17,9 +17,18 @@ api.interceptors.request.use((config) => {
 export const login = (data) => api.post('/users/login', data);
 export const register = (data) => api.post('/users/register', data);
 export const logout = () => api.post('/users/logout');
-export const getPosts = () => api.get('/posts');
+export const getPosts = (page) => api.get(`/posts/home?page=${page}`);
+export const getProfile = () => api.get('/users/profile');
 export const createPost = (data) => api.post('/user-posts/add-post', data);
 export const getPost = (id) => api.get(`/posts/post-detail/${id}`);
 export const createComment = (data) => api.post('/comments', data);
-export const getComments = (postId) => api.get(`/comments?postId=${postId}`);
+export const getComments = (postId) => api.get(`/comments/post-comments/${postId}`);
+export const updateProfile = (id, formData) => api.put(`/users/${id}`, formData, {headers: {'Content-Type': 'multipart/form-data',},});
+export const getUserPosts = (userId,page) => api.get(`/user-posts/all?page=${page}&userId=${userId}`)
+export const getSearchResults = (query) => api.get(`/search-service/search?query=${query}`);
+export const getProfileByUsername = (username) => api.get(`/users/profilebyusername/${username}`);
+export const votePost = (postId, voteType) => {return api.post('/user-posts/vote', {postId,voteType,});};
+export const chatBotQuery = (query) => {return api.post('/chatbot',{prompt:query});};
+
+
 export default api;
